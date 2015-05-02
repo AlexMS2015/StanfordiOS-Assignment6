@@ -11,17 +11,20 @@
 
 @interface DownloadFlickrData () <UITableViewDataSource, UITableViewDelegate>
 @property (strong, nonatomic) NSMutableArray *uniqueCountries;
-@property (nonatomic, strong) NSMutableArray *places;
+@property (nonatomic, strong) NSMutableDictionary *places;
 @end
 
 @implementation DownloadFlickrData
 
 #pragma mark - Properties
 
--(void)setPlaces:(NSMutableArray *)places
+-(NSMutableDictionary *)places
 {
-    _places = places;
-    [self.tableView reloadData];
+    if (!_places) {
+        _places = [NSMutableDictionary dictionary];
+    }
+    
+    return _places;
 }
 
 #pragma mark - View Life Cycle
@@ -29,10 +32,10 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    [self downloadData];
+    [self downloadJSONDataIntoDictionary];
 }
 
--(void)downloadData
+-(void)downloadJSONDataIntoDictionary
 {
     NSURL *topPlaces = [FlickrFetcher URLforTopPlaces];
     NSData *JSONResults = [NSData dataWithContentsOfURL:topPlaces];
@@ -40,22 +43,23 @@
                                                                         options:0
                                                                           error:NULL];
     
-    self.places = [propertyListResults valueForKeyPath:FLICKR_RESULTS_PLACES]; // FLICKR_RESULTS_PLACES = places.place.... "places" is the key for the only object in the top level dictionary while "place" is the key for an array of dictionaries inside the "places" dictionary. Dictionary > Places key for another dictionary > Place key for an array of dictionaries
+    [self setupTableDataStructuresUsingDictionary:propertyListResults];
     
-    [self setupTableDataStructures];
-    //NSLog(@"%@", self.places);
+    NSLog(@"%@", self.places);
 }
 
--(void)setupTableDataStructures
+-(void)setupTableDataStructuresUsingDictionary:(NSDictionary *)propertyListResults;
 {
-    NSMutableArray *placesTemp = [NSMutableArray array];
     NSMutableSet *uniqueCountriesSet = [NSMutableSet set];
     
-    if ([self.places count]) {
+    NSArray *placesArray = [propertyListResults valueForKeyPath:FLICKR_RESULTS_PLACES];
+    
+    if ([placesArray count]) {
         
-        [self.places enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [placesArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             NSString *placeName = [obj valueForKeyPath:FLICKR_PLACE_NAME];
             NSArray *placeNameArray = [placeName componentsSeparatedByString:@", "];
+            NSString *country = [placeNameArray lastObject];
             
             NSDictionary *newPlace = @{@"Place ID" : [obj valueForKey:FLICKR_PLACE_ID],
                                        @"Town" : [placeNameArray firstObject],
@@ -63,21 +67,40 @@
                                        @"Country" : [placeNameArray lastObject],
                                        @"Photo Count" : [obj valueForKey:@"photo_count"]};
             
-            [placesTemp addObject:newPlace];
-            [uniqueCountriesSet addObject:[placeNameArray lastObject]];
+            if (!self.places[country]) {
+                self.places[country] = [NSMutableArray array];
+                [self.places[country] addObject:newPlace];
+            } else {
+                [self.places[country] addObject:newPlace];
+            }
+            
+            [uniqueCountriesSet addObject:country];
         }];
         
-        // convert the Set of unique countries into a sorted array
+        // convert the Set of unique countries into an array
         self.uniqueCountries = [NSMutableArray arrayWithArray:[uniqueCountriesSet allObjects]];
-        [self.uniqueCountries sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        
+        /*for (NSMutableArray *country in self.places) {
+            [country sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+                return [obj1[@"Town"] compare:obj2[@"Town"]];
+            }];
+        }*/
+        
+        
+        /*[self.uniqueCountries sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
             return [obj1 compare:obj2];
         }];
         
-        self.places = [placesTemp copy];
+        // sort the places dictionary by the key so it matches the uniqueCountries array
+        [self.places sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            return
+        }];*/
+        
     }
 }
 
 #pragma mark - UITableViewDelegate
+
 
 #pragma mark - UITableViewDataSource
 
@@ -93,7 +116,8 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.places count];
+    NSString *countryName = self.uniqueCountries[section];
+    return [self.places[countryName] count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -102,11 +126,11 @@
     
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
-    NSDictionary *place = self.places[indexPath.row];
-
+    NSString *countryName = self.uniqueCountries[indexPath.section];
+    NSDictionary *place = self.places[countryName][indexPath.row];
     
     cell.textLabel.text = place[@"Town"];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@, %@", place[@"City"], place[@"Country"]];
+    cell.detailTextLabel.text = place[@"City"];
     
     return cell;
 }
