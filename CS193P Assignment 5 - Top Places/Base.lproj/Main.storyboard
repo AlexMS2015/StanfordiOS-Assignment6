@@ -92,6 +92,12 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Top Places" id="yw8-xi-FXh"/>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="knw-W0-NNt">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <connections>
+                            <action selector="downloadJSONDataIntoDictionary" destination="ftD-lv-OjV" eventType="valueChanged" id="ypO-bF-SLv"/>
+                        </connections>
+                    </refreshControl>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xGI-2W-a0U" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

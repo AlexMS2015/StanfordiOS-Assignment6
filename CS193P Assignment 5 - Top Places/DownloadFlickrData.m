@@ -10,21 +10,30 @@
 #import "FlickrFetcher.h"
 
 @interface DownloadFlickrData () <UITableViewDataSource, UITableViewDelegate>
-@property (strong, nonatomic) NSMutableArray *uniqueCountries;
-@property (nonatomic, strong) NSMutableDictionary *places;
+@property (nonatomic, strong) NSMutableDictionary *data;
+@property (nonatomic, strong) NSString *cellIdentifier;
 @end
 
 @implementation DownloadFlickrData
 
 #pragma mark - Properties
 
--(NSMutableDictionary *)places
+-(NSString *)cellIdentifier
 {
-    if (!_places) {
-        _places = [NSMutableDictionary dictionary];
+    if (!_cellIdentifier) {
+        _cellIdentifier = @"Place Cell";
     }
     
-    return _places;
+    return _cellIdentifier;
+}
+
+-(NSMutableDictionary *)data
+{
+    if (!_data) {
+        _data = [NSMutableDictionary dictionary];
+    }
+    
+    return _data;
 }
 
 #pragma mark - View Life Cycle
@@ -35,27 +44,33 @@
     [self downloadJSONDataIntoDictionary];
 }
 
--(void)downloadJSONDataIntoDictionary
+-(IBAction)downloadJSONDataIntoDictionary // IBAction links to the refresh control so whenever the user refreshes the table by dragging down, this method will be called.
 {
+    [self.refreshControl beginRefreshing];
+    
+    self.data = nil;
     NSURL *topPlaces = [FlickrFetcher URLforTopPlaces];
-    NSData *JSONResults = [NSData dataWithContentsOfURL:topPlaces];
-    NSDictionary *propertyListResults = [NSJSONSerialization JSONObjectWithData:JSONResults
-                                                                        options:0
-                                                                          error:NULL];
-    
-    [self setupTableDataStructuresUsingDictionary:propertyListResults];
-    
-    NSLog(@"%@", self.places);
+
+    dispatch_queue_t queryQueue = dispatch_queue_create("Query Queue", NULL);
+    dispatch_async(queryQueue, ^{
+       
+        NSData *JSONResults = [NSData dataWithContentsOfURL:topPlaces];
+        NSDictionary *propertyListResults = [NSJSONSerialization JSONObjectWithData:JSONResults
+                                                                            options:0
+                                                                              error:NULL];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setupTableDataStructuresUsingDictionary:propertyListResults];
+            [self.tableView reloadData];
+            [self.refreshControl endRefreshing];
+        });
+    });
 }
 
 -(void)setupTableDataStructuresUsingDictionary:(NSDictionary *)propertyListResults;
 {
-    NSMutableSet *uniqueCountriesSet = [NSMutableSet set];
-    
     NSArray *placesArray = [propertyListResults valueForKeyPath:FLICKR_RESULTS_PLACES];
     
     if ([placesArray count]) {
-        
         [placesArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             NSString *placeName = [obj valueForKeyPath:FLICKR_PLACE_NAME];
             NSArray *placeNameArray = [placeName componentsSeparatedByString:@", "];
@@ -64,75 +79,82 @@
             NSDictionary *newPlace = @{@"Place ID" : [obj valueForKey:FLICKR_PLACE_ID],
                                        @"Town" : [placeNameArray firstObject],
                                        @"City" : placeNameArray[1],
-                                       @"Country" : [placeNameArray lastObject],
                                        @"Photo Count" : [obj valueForKey:@"photo_count"]};
+            //NSLog(@"%p points at %p", &newPlace, newPlace);
             
-            if (!self.places[country]) {
-                self.places[country] = [NSMutableArray array];
-                [self.places[country] addObject:newPlace];
+            if (!self.data[country]) {
+                self.data[country] = [NSMutableArray array];
+                [self.data[country] addObject:newPlace];
             } else {
-                [self.places[country] addObject:newPlace];
+                [self.data[country] addObject:newPlace];
             }
-            
-            [uniqueCountriesSet addObject:country];
         }];
         
-        // convert the Set of unique countries into an array
-        self.uniqueCountries = [NSMutableArray arrayWithArray:[uniqueCountriesSet allObjects]];
-        
-        /*for (NSMutableArray *country in self.places) {
-            [country sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        // for each country, sort by town name within that country alphabetically
+        for (NSString *country in self.data) {
+            NSMutableArray *placesInCountry = self.data[country];
+            [placesInCountry sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
                 return [obj1[@"Town"] compare:obj2[@"Town"]];
             }];
-        }*/
-        
-        
-        /*[self.uniqueCountries sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-            return [obj1 compare:obj2];
-        }];
-        
-        // sort the places dictionary by the key so it matches the uniqueCountries array
-        [self.places sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-            return
-        }];*/
-        
+        }
     }
 }
 
 #pragma mark - UITableViewDelegate
 
+-(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *countryName = [self.data allKeys][indexPath.section];
+    NSDictionary *place = self.data[countryName][indexPath.row];
+    
+    NSString *placeID = place[@"Place ID"];
+    
+    NSURL *photosInPlace = [FlickrFetcher URLforPhotosInPlace:placeID maxResults:50];
+    NSData *JSONResults = [NSData dataWithContentsOfURL:photosInPlace];
+    NSDictionary *propertyListResults = [NSJSONSerialization JSONObjectWithData:JSONResults
+                                                                        options:0
+                                                                          error:NULL];
+    NSLog(@"%@", propertyListResults);
+}
 
 #pragma mark - UITableViewDataSource
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-   return self.uniqueCountries[section];
+    return [self.data allKeys][section];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [self.uniqueCountries count];
+    return [self.data count];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSString *countryName = self.uniqueCountries[section];
-    return [self.places[countryName] count];
+    NSString *countryName = [self.data allKeys][section];
+    return [self.data[countryName] count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellIdentifier = @"Place Cell";
-    
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    
-    NSString *countryName = self.uniqueCountries[indexPath.section];
-    NSDictionary *place = self.places[countryName][indexPath.row];
-    
-    cell.textLabel.text = place[@"Town"];
-    cell.detailTextLabel.text = place[@"City"];
-    
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:self.cellIdentifier];
+    cell.textLabel.text = [self getTitleForCellAtIndexPath:indexPath];
+    cell.detailTextLabel.text = [self getSubtitleForCellAtIndexPath:indexPath];
     return cell;
+}
+
+-(NSString *)getTitleForCellAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *countryName = [self.data allKeys][indexPath.section];
+    NSDictionary *place = self.data[countryName][indexPath.row];
+    return place[@"Town"];
+}
+
+-(NSString *)getSubtitleForCellAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *countryName = [self.data allKeys][indexPath.section];
+    NSDictionary *place = self.data[countryName][indexPath.row];
+    return place[@"City"];
 }
 
 @end
