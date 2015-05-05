@@ -8,6 +8,7 @@
 
 #import "TopPlacesTVC.h"
 #import "FlickrFetcher.h"
+#import "PhotosForPlaceTVC.h"
 
 @interface TopPlacesTVC ()
 
@@ -81,17 +82,22 @@
 
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    /*NSString *countryName = [self.data allKeys][indexPath.section];
-     NSDictionary *place = self.data[countryName][indexPath.row];
-     
-     NSString *placeID = place[@"Place ID"];
-     
-     NSURL *photosInPlace = [FlickrFetcher URLforPhotosInPlace:placeID maxResults:50];
-     NSData *JSONResults = [NSData dataWithContentsOfURL:photosInPlace];
-     NSDictionary *propertyListResults = [NSJSONSerialization JSONObjectWithData:JSONResults
-     options:0
-     error:NULL];
-     NSLog(@"%@", propertyListResults);*/
+    
+
+}
+
+#pragma mark - Other
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier  isEqual: @"Show Photos for Place"]) {
+        NSIndexPath *pathOfSelectedCell = [self.tableView indexPathForCell:sender];
+        NSDictionary *cellData = [self dictionaryForCellAtIndexPath:pathOfSelectedCell];
+        if ([segue.destinationViewController isMemberOfClass:[PhotosForPlaceTVC class]]) {
+            PhotosForPlaceTVC *photosForSelectedPlace = (PhotosForPlaceTVC *)segue.destinationViewController;
+            photosForSelectedPlace.placeID = cellData[@"Place ID"];
+        }
+    }
 }
 
 @end

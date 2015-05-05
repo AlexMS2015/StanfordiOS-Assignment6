@@ -11,7 +11,6 @@
 @interface FlickrDataTVC () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) NSString *cellIdentifier;
 @property (nonatomic, strong) NSDictionary *data;
-
 @end
 
 @implementation FlickrDataTVC
@@ -52,23 +51,23 @@
     dispatch_queue_t queryQueue = dispatch_queue_create("Query Queue", NULL);
     dispatch_async(queryQueue, ^{
         self.data = [self dictionaryFromFlickrData];
-        NSLog(@"%@", self.data);
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
             [self.refreshControl endRefreshing];
         });
-        
     });
-    
-
 }
 
 #pragma mark - UITableViewDataSource
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return [self.data allKeys][section];
+    if ([self.data count] > 1) {
+        return [self.data allKeys][section];
+    } else {
+        return nil;
+    }
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -92,6 +91,14 @@
     cell.textLabel.text = [self getTitleForCellInDictionary:dictionaryInSection];
     cell.detailTextLabel.text = [self getSubtitleForCellInDictionary:dictionaryInSection];
     return cell;
+}
+
+#pragma mark - Other
+
+-(NSDictionary *)dictionaryForCellAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *sectionName = [self.data allKeys][indexPath.section];
+    return self.data[sectionName][indexPath.row];
 }
 
 #pragma mark - Abstract Methods
