@@ -33,17 +33,27 @@
     return dictionary[@"City"];
 }
 
--(NSDictionary *)dictionaryFromFlickrData
+-(NSArray *)getArrayOfTopPlaces
 {
-    
     NSURL *topPlaces = [FlickrFetcher URLforTopPlaces];
-    
     NSData *JSONResults = [NSData dataWithContentsOfURL:topPlaces];
     NSDictionary *propertyListResults = [NSJSONSerialization JSONObjectWithData:JSONResults
                                                                         options:0
                                                                           error:NULL];
+    return [propertyListResults valueForKeyPath:FLICKR_RESULTS_PLACES];
+}
+
+-(void)sortArrayOfDictionaries:(NSMutableArray *)array withKey:(NSString *)key
+{
+    [array sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            return [obj1[key] compare:obj2[key]];
+    }];
+}
+
+-(NSDictionary *)dictionaryFromFlickrData
+{
+    NSArray *placesArray = [self getArrayOfTopPlaces];
     
-    NSArray *placesArray = [propertyListResults valueForKeyPath:FLICKR_RESULTS_PLACES];
     NSMutableDictionary *places = [NSMutableDictionary dictionary];
     
     if ([placesArray count]) {
@@ -69,10 +79,10 @@
         // for each country, sort by town name within that country alphabetically
         for (NSString *country in places) {
             NSMutableArray *placesInCountry = places[country];
-            [placesInCountry sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-                return [obj1[@"Town"] compare:obj2[@"Town"]];
-            }];
+            [self sortArrayOfDictionaries:placesInCountry withKey:@"Town"];
         }
+        
+
     }
     
     return places;
@@ -90,12 +100,13 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier  isEqual: @"Show Photos for Place"]) {
+    if ([segue.identifier isEqual: @"Show Photos for Place"]) {
         NSIndexPath *pathOfSelectedCell = [self.tableView indexPathForCell:sender];
         NSDictionary *cellData = [self dictionaryForCellAtIndexPath:pathOfSelectedCell];
         if ([segue.destinationViewController isMemberOfClass:[PhotosForPlaceTVC class]]) {
             PhotosForPlaceTVC *photosForSelectedPlace = (PhotosForPlaceTVC *)segue.destinationViewController;
             photosForSelectedPlace.placeID = cellData[@"Place ID"];
+            photosForSelectedPlace.placeName = cellData[@"Town"];
         }
     }
 }

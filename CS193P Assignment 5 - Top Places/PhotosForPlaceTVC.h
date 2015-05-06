@@ -10,4 +10,5 @@
 
 @interface PhotosForPlaceTVC : FlickrDataTVC
 @property (nonatomic, strong) NSString *placeID;
+@property (nonatomic, strong) NSString *placeName;
 @end
