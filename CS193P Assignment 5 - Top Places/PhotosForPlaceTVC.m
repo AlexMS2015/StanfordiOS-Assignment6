@@ -10,30 +10,7 @@
 #import "FlickrFetcher.h"
 #import "PhotoViewController.h"
 
-@interface PhotosForPlaceTVC ()
-
-@end
-
 @implementation PhotosForPlaceTVC
-
-#pragma mark - Life Cycle
-
--(void)viewDidLoad
-{
-    [super viewDidLoad];
-    self.navigationItem.title = self.placeName;
-}
-
-#pragma mark - Properties
-
--(NSString *)placeID
-{
-    if (!_placeID) {
-        _placeID = [NSString string];
-    }
-    
-    return _placeID;
-}
 
 #pragma mark - Concrete Methods
 

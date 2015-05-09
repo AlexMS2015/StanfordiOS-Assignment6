@@ -9,10 +9,6 @@
 #import "RecentlyViewedTVC.h"
 #import "RecentlyViewedPhotos.h"
 
-@interface RecentlyViewedTVC ()
-
-@end
-
 @implementation RecentlyViewedTVC
 
 -(void)viewWillAppear:(BOOL)animated
@@ -23,7 +19,6 @@
 
 -(NSDictionary *)dictionaryFromFlickrData
 {
-    NSLog(@"%@", [[RecentlyViewedPhotos recentPhotos] recentPhotosArray]);
     return @{@"Recent Photos" : [[RecentlyViewedPhotos recentPhotos] recentPhotosArray]};
 }
 

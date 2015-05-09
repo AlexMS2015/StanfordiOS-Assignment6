@@ -11,5 +11,4 @@
 
 @interface PhotosForPlaceTVC : ListOfPhotosTVC
 @property (nonatomic, strong) NSString *placeID;
-@property (nonatomic, strong) NSString *placeName;
 @end

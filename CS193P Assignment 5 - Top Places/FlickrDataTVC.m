@@ -26,15 +26,6 @@
     return _cellIdentifier;
 }
 
--(NSDictionary *)data
-{
-    if (!_data) {
-        _data = [NSDictionary dictionary];
-    }
-
-    return _data;
-}
-
 #pragma mark - View Life Cycle
 
 -(void)viewDidLoad

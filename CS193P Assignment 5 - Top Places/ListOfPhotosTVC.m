@@ -59,6 +59,7 @@
 -(void)prepareVC:(PhotoViewController *)selectedPhoto withPhoto:(NSDictionary *)photo
 {
     selectedPhoto.photo = photo;
+    selectedPhoto.title = [self getTitleForCellInDictionary:photo];
 }
 
 #pragma mark - UITableViewDelegate

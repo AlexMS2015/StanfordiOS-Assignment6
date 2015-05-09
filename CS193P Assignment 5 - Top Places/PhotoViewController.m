@@ -19,21 +19,8 @@
 
 #pragma mark - Helpers / Other
 
--(NSString *)getTitleForTable
-{
-    if (![[self.photo valueForKeyPath:FLICKR_PHOTO_TITLE] isEqualToString:@""]) {
-        return [self.photo valueForKeyPath:FLICKR_PHOTO_TITLE];
-    } else if (![[self.photo valueForKeyPath:FLICKR_PHOTO_DESCRIPTION] isEqualToString:@""]) {
-        return [self.photo valueForKeyPath:FLICKR_PHOTO_DESCRIPTION];
-    } else {
-        return @"Unknown";
-    }
-}
-
 -(void)downloadAndDisplayPhoto
 {
-    self.title = [self getTitleForTable];
-    
     NSURL *photoUrl = [FlickrFetcher URLforPhoto:self.photo format:FlickrPhotoFormatLarge];
     NSURLRequest *photoRequest = [NSURLRequest requestWithURL:photoUrl];
     
@@ -85,11 +72,6 @@
 -(void)awakeFromNib
 {
     self.splitViewController.delegate = self;
-}
-
--(void)viewDidLoad
-{
-    [super viewDidLoad];
 }
 
 #pragma mark - UIScrollViewDelegate

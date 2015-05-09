@@ -33,6 +33,7 @@ static NSString *recentPhotosKey = @"Recently Viewed";
     
     [recentlyViewedPhotos insertObject:photo atIndex:0];
     [self.defaults setObject:recentlyViewedPhotos forKey:recentPhotosKey];
+    [self.defaults synchronize];
 }
 
 -(NSArray *)recentPhotosArray
@@ -58,15 +59,12 @@ static NSString *recentPhotosKey = @"Recently Viewed";
     
     if (self) {
         self.defaults = [NSUserDefaults standardUserDefaults];
-        [self.defaults setObject:@[] forKey:recentPhotosKey];
+        if (![self.defaults valueForKey:recentPhotosKey]) {
+            [self.defaults setObject:@[] forKey:recentPhotosKey];
+        }
     }
     
     return self;
-}
-
--(void)dealloc
-{
-    [self.defaults synchronize];
 }
 
 @end

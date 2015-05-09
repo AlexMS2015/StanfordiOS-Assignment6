@@ -35,8 +35,8 @@
 
 -(NSArray *)getArrayOfTopPlaces
 {
-    NSURL *topPlaces = [FlickrFetcher URLforTopPlaces];
-    NSData *JSONResults = [NSData dataWithContentsOfURL:topPlaces];
+    NSURL *topPlacesURL = [FlickrFetcher URLforTopPlaces];
+    NSData *JSONResults = [NSData dataWithContentsOfURL:topPlacesURL];
     NSDictionary *propertyListResults = [NSJSONSerialization JSONObjectWithData:JSONResults
                                                                         options:0
                                                                           error:NULL];
@@ -60,7 +60,6 @@
         [placesArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             NSString *placeName = [obj valueForKeyPath:FLICKR_PLACE_NAME];
             NSArray *placeNameArray = [placeName componentsSeparatedByString:@", "];
-            NSString *country = [placeNameArray lastObject];
             
             NSDictionary *newPlace = @{@"Place ID" : [obj valueForKey:FLICKR_PLACE_ID],
                                        @"Town" : [placeNameArray firstObject],
@@ -68,6 +67,7 @@
                                        @"Photo Count" : [obj valueForKey:@"photo_count"]};
             //NSLog(@"%p points at %p", &newPlace, newPlace);
             
+            NSString *country = [placeNameArray lastObject];
             if (!places[country]) {
                 places[country] = [NSMutableArray array];
                 [places[country] addObject:newPlace];
@@ -81,19 +81,9 @@
             NSMutableArray *placesInCountry = places[country];
             [self sortArrayOfDictionaries:placesInCountry withKey:@"Town"];
         }
-        
-
     }
     
     return places;
-}
-
-#pragma mark - UITableViewDelegate
-
--(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-
 }
 
 #pragma mark - Other
@@ -106,7 +96,7 @@
         if ([segue.destinationViewController isMemberOfClass:[PhotosForPlaceTVC class]]) {
             PhotosForPlaceTVC *photosForSelectedPlace = (PhotosForPlaceTVC *)segue.destinationViewController;
             photosForSelectedPlace.placeID = cellData[@"Place ID"];
-            photosForSelectedPlace.placeName = cellData[@"Town"];
+            photosForSelectedPlace.title = cellData[@"Town"];
         }
     }
 }
