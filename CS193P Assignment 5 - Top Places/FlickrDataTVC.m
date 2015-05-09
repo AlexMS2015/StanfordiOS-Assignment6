@@ -31,7 +31,7 @@
     if (!_data) {
         _data = [NSDictionary dictionary];
     }
-    
+
     return _data;
 }
 

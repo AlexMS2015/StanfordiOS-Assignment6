@@ -9,7 +9,7 @@
 #import "PhotoViewController.h"
 #import "FlickrFetcher.h"
 
-@interface PhotoViewController () <UIScrollViewDelegate>
+@interface PhotoViewController () <UIScrollViewDelegate, UISplitViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) UIImageView *imageView;
 @end
@@ -51,26 +51,20 @@
     [downloadPhotoTask resume];
 }
 
--(void)scaleImageInScrollView
-{
-    
-}
-
 #pragma mark - Properties
 
--(NSDictionary *)photo
+-(void)setPhoto:(NSDictionary *)photo
 {
-    if (!_photo) {
-        _photo = [NSDictionary dictionary];
-    }
-    
-    return _photo;
+    _photo = photo;
+    [self downloadAndDisplayPhoto];
+    self.title = [self getTitleForTable];
 }
 
 - (UIImageView *)imageView
 {
     if (!_imageView) {
         _imageView = [[UIImageView alloc] init];
+        [self.scrollView addSubview:_imageView];
     }
     return _imageView;
 }
@@ -85,18 +79,14 @@
 
 #pragma mark - Life Cycle
 
+-(void)awakeFromNib
+{
+    self.splitViewController.delegate = self;
+}
+
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = [self getTitleForTable];
-    [self.scrollView addSubview:self.imageView];
-}
-
--(void)viewWillLayoutSubviews
-{
-    [super viewWillLayoutSubviews];
-    [self downloadAndDisplayPhoto];
-    [self scaleImageInScrollView];
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -104,6 +94,20 @@
 -(UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
     return self.imageView;
+}
+
+#pragma mark - UISplitViewControllerDelegate
+
+// this method will be called when the master VC is hidden and provides us with the bar button to display as one of it arguments
+-(void)splitViewController:(UISplitViewController *)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)pc
+{
+    barButtonItem.title = @"Select Photo";
+    self.navigationItem.leftBarButtonItem = barButtonItem;
+}
+
+-(void)splitViewController:(UISplitViewController *)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
+{
+    self.navigationItem.leftBarButtonItem = nil;
 }
 
 @end

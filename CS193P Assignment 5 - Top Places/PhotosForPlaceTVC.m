@@ -85,8 +85,25 @@
         NSIndexPath *pathOfSelectedCell = [self.tableView indexPathForCell:sender];
         NSDictionary *cellData = [self dictionaryForCellAtIndexPath:pathOfSelectedCell];
         if ([segue.destinationViewController isMemberOfClass:[PhotoViewController class]]) {
-            PhotoViewController *selectedPhoto = (PhotoViewController *)segue.destinationViewController;
-            selectedPhoto.photo = cellData;
+            [self prepareVC:segue.destinationViewController withPhoto:cellData];
+        }
+    }
+}
+
+-(void)prepareVC:(PhotoViewController *)selectedPhoto withPhoto:(NSDictionary *)photo
+{
+    selectedPhoto.photo = photo;
+}
+
+#pragma mark - UITableViewDelegate
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *cellData = [self dictionaryForCellAtIndexPath:indexPath];
+    if ([self.splitViewController.viewControllers[1] isMemberOfClass:[UINavigationController class]]) {
+        UINavigationController *detailNC = (UINavigationController *)self.splitViewController.viewControllers[1];
+        if ([[detailNC.viewControllers lastObject] isMemberOfClass:[PhotoViewController class]]) {
+            [self prepareVC:[detailNC.viewControllers lastObject] withPhoto:cellData];
         }
     }
 }
