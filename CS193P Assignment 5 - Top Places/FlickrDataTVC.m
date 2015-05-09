@@ -77,8 +77,8 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSString *countryName = [self.data allKeys][section];
-    return [self.data[countryName] count];
+    NSString *sectionName = [self.data allKeys][section];
+    return [self.data[sectionName] count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

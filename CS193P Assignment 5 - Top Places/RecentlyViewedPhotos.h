@@ -9,5 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface RecentlyViewedPhotos : NSObject
-
++(instancetype)recentPhotos; // singleton class. use this method to access this class!
+-(void)addPhoto:(NSDictionary *)photo;
 @end

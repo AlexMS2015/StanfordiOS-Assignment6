@@ -8,6 +8,7 @@
 
 #import "PhotoViewController.h"
 #import "FlickrFetcher.h"
+#import "RecentlyViewedPhotos.h"
 
 @interface PhotoViewController () <UIScrollViewDelegate, UISplitViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -31,6 +32,8 @@
 
 -(void)downloadAndDisplayPhoto
 {
+    self.title = [self getTitleForTable];
+    
     NSURL *photoUrl = [FlickrFetcher URLforPhoto:self.photo format:FlickrPhotoFormatLarge];
     NSURLRequest *photoRequest = [NSURLRequest requestWithURL:photoUrl];
     
@@ -57,7 +60,7 @@
 {
     _photo = photo;
     [self downloadAndDisplayPhoto];
-    self.title = [self getTitleForTable];
+    [[RecentlyViewedPhotos recentPhotos] addPhoto:photo];
 }
 
 - (UIImageView *)imageView
