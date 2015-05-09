@@ -7,7 +7,8 @@
 //
 
 #import "FlickrDataTVC.h"
+#import "ListOfPhotosTVC.h"
 
-@interface RecentlyViewedTVC : FlickrDataTVC
+@interface RecentlyViewedTVC : ListOfPhotosTVC
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "RecentlyViewedPhotos.h"
+#import "FlickrFetcher.h"
 
 @interface RecentlyViewedPhotos ()
 @property (strong, nonatomic) NSUserDefaults *defaults;
@@ -25,15 +26,25 @@ static NSString *recentPhotosKey = @"Recently Viewed";
 -(void)addPhoto:(NSDictionary *)photo
 {
     NSMutableArray *recentlyViewedPhotos = [[self.defaults valueForKey:recentPhotosKey] mutableCopy];
+        
+    if ([recentlyViewedPhotos containsObject:photo]) {
+        [recentlyViewedPhotos removeObject:photo];
+    }
+    
     [recentlyViewedPhotos insertObject:photo atIndex:0];
     [self.defaults setObject:recentlyViewedPhotos forKey:recentPhotosKey];
+}
+
+-(NSArray *)recentPhotosArray
+{
+    return [[self.defaults valueForKey:recentPhotosKey] copy];
 }
 
 +(instancetype)recentPhotos
 {
     static RecentlyViewedPhotos *recentPhotos; // a static variable is not destroyed when the method is done executing, it is not kept on the stack. the first time this method is called, sharedStore will be set to point to an instance of RecentlyViewedPhotos. This pointer will never be destroyed and hence the object it points to never will be either (it points strongly at it).
      
-     // Do I need to create a sharedStore?
+    // do I need to create a shared instance of the class?
     if (!recentPhotos) {
          recentPhotos = [[self alloc] initPrivate];
     }

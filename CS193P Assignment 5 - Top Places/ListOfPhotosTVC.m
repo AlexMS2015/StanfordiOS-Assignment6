@@ -7,6 +7,8 @@
 //
 
 #import "ListOfPhotosTVC.h"
+#import "FlickrFetcher.h"
+#import "PhotoViewController.h"
 
 @interface ListOfPhotosTVC ()
 
@@ -14,36 +16,62 @@
 
 @implementation ListOfPhotosTVC
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+#pragma mark - Concrete Methods
+
+-(NSString *)nameOfCellIdentifier
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
+    return @"Photo Cell";
+}
+
+-(NSString *)getTitleForCellInDictionary:(NSDictionary *)dictionary
+{
+    if (![[dictionary valueForKeyPath:FLICKR_PHOTO_TITLE] isEqualToString:@""]) {
+        return [dictionary valueForKeyPath:FLICKR_PHOTO_TITLE];
+    } else if (![[dictionary valueForKeyPath:FLICKR_PHOTO_DESCRIPTION] isEqualToString:@""]) {
+        return [dictionary valueForKeyPath:FLICKR_PHOTO_DESCRIPTION];
+    } else {
+        return @"Unknown";
     }
-    return self;
 }
 
-- (void)viewDidLoad
+-(NSString *)getSubtitleForCellInDictionary:(NSDictionary *)dictionary
 {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    if (![[dictionary valueForKeyPath:FLICKR_PHOTO_TITLE] isEqualToString:@""]) {
+        return [dictionary valueForKeyPath:FLICKR_PHOTO_DESCRIPTION];
+    } else {
+        return @"";
+    }
 }
 
-- (void)didReceiveMemoryWarning
+#pragma mark - Other
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    if ([segue.identifier isEqual: @"Show Photo"]) {
+        NSIndexPath *pathOfSelectedCell = [self.tableView indexPathForCell:sender];
+        NSDictionary *cellData = [self dictionaryForCellAtIndexPath:pathOfSelectedCell];
+        if ([segue.destinationViewController isMemberOfClass:[PhotoViewController class]]) {
+            [self prepareVC:segue.destinationViewController withPhoto:cellData];
+        }
+    }
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+-(void)prepareVC:(PhotoViewController *)selectedPhoto withPhoto:(NSDictionary *)photo
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    selectedPhoto.photo = photo;
 }
-*/
+
+#pragma mark - UITableViewDelegate
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *cellData = [self dictionaryForCellAtIndexPath:indexPath];
+    if ([self.splitViewController.viewControllers[1] isMemberOfClass:[UINavigationController class]]) {
+        UINavigationController *detailNC = (UINavigationController *)self.splitViewController.viewControllers[1];
+        if ([[detailNC.viewControllers lastObject] isMemberOfClass:[PhotoViewController class]]) {
+            [self prepareVC:[detailNC.viewControllers lastObject] withPhoto:cellData];
+        }
+    }
+}
 
 @end

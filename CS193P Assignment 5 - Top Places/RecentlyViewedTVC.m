@@ -7,11 +7,24 @@
 //
 
 #import "RecentlyViewedTVC.h"
+#import "RecentlyViewedPhotos.h"
 
 @interface RecentlyViewedTVC ()
 
 @end
 
 @implementation RecentlyViewedTVC
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self downloadDataAndRefreshUI];
+}
+
+-(NSDictionary *)dictionaryFromFlickrData
+{
+    NSLog(@"%@", [[RecentlyViewedPhotos recentPhotos] recentPhotosArray]);
+    return @{@"Recent Photos" : [[RecentlyViewedPhotos recentPhotos] recentPhotosArray]};
+}
 
 @end

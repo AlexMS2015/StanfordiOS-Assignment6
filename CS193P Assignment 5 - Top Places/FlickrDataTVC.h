@@ -10,7 +10,8 @@
 
 @interface FlickrDataTVC : UITableViewController
 
--(NSDictionary *)dictionaryForCellAtIndexPath:(NSIndexPath *)indexPath; // dictionary of data for a particular cell. the keys will be as specific in the subclass method dictionaryFromFlickrData;
+-(NSDictionary *)dictionaryForCellAtIndexPath:(NSIndexPath *)indexPath; // dictionary of data for a particular cell. the keys will be as specified in the subclass method dictionaryFromFlickrData;
+-(IBAction)downloadDataAndRefreshUI; // allows a subclass to manually refresh itself. not neccesasry to call manually if you don't need to. this class will call this on viewDidLoad: only.
 
 #pragma mark - Abstract Methods
 
