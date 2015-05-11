@@ -37,6 +37,7 @@
 		FAFC9A191B00D80E0032D8E6 /* Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = FAFC9A181B00D80E0032D8E6 /* Photo.m */; };
 		FAFC9A1C1B00D80E0032D8E6 /* Region.m in Sources */ = {isa = PBXBuildFile; fileRef = FAFC9A1B1B00D80E0032D8E6 /* Region.m */; };
 		FAFC9A1F1B00D80E0032D8E6 /* Photographer.m in Sources */ = {isa = PBXBuildFile; fileRef = FAFC9A1E1B00D80E0032D8E6 /* Photographer.m */; };
+		FAFC9A241B00DBE50032D8E6 /* TopRegionsCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = FAFC9A231B00DBE50032D8E6 /* TopRegionsCDTVC.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,6 +101,8 @@
 		FAFC9A1B1B00D80E0032D8E6 /* Region.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Region.m; sourceTree = "<group>"; };
 		FAFC9A1D1B00D80E0032D8E6 /* Photographer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Photographer.h; sourceTree = "<group>"; };
 		FAFC9A1E1B00D80E0032D8E6 /* Photographer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Photographer.m; sourceTree = "<group>"; };
+		FAFC9A221B00DBE50032D8E6 /* TopRegionsCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopRegionsCDTVC.h; sourceTree = "<group>"; };
+		FAFC9A231B00DBE50032D8E6 /* TopRegionsCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopRegionsCDTVC.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,8 +164,7 @@
 			children = (
 				FAB7B9621AF45C7700AF4514 /* AppDelegate.h */,
 				FAB7B9631AF45C7700AF4514 /* AppDelegate.m */,
-				FAFC99FD1B00C73B0032D8E6 /* CoreDataTableViewController.h */,
-				FAFC99FC1B00C73B0032D8E6 /* CoreDataTableViewController.m */,
+				FAFC9A211B00DBC40032D8E6 /* Controller */,
 				FAB7B98D1AF4607200AF4514 /* FlickrDataTVC.h */,
 				FAB7B98E1AF4607200AF4514 /* FlickrDataTVC.m */,
 				FAB1A6E11AF60D1700381201 /* TopPlacesTVC.h */,
@@ -252,6 +254,17 @@
 				FAB1A6ED1AFA3FEA00381201 /* iPad.storyboard */,
 			);
 			name = View;
+			sourceTree = "<group>";
+		};
+		FAFC9A211B00DBC40032D8E6 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				FAFC99FD1B00C73B0032D8E6 /* CoreDataTableViewController.h */,
+				FAFC99FC1B00C73B0032D8E6 /* CoreDataTableViewController.m */,
+				FAFC9A221B00DBE50032D8E6 /* TopRegionsCDTVC.h */,
+				FAFC9A231B00DBE50032D8E6 /* TopRegionsCDTVC.m */,
+			);
+			name = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -367,6 +380,7 @@
 				FAB7B9601AF45C7700AF4514 /* main.m in Sources */,
 				FAFC9A191B00D80E0032D8E6 /* Photo.m in Sources */,
 				FAB1A6E91AF8E50B00381201 /* PhotoViewController.m in Sources */,
+				FAFC9A241B00DBE50032D8E6 /* TopRegionsCDTVC.m in Sources */,
 				FAFC9A1C1B00D80E0032D8E6 /* Region.m in Sources */,
 				FAFC99D61AFF53320032D8E6 /* Model.xcdatamodeld in Sources */,
 				FAFA455B1AFD9DCC007806E9 /* RecentlyViewedTVC.m in Sources */,
