@@ -23,7 +23,7 @@
 {
     NSURL *photoUrl = [FlickrFetcher URLforPhoto:self.photo format:FlickrPhotoFormatLarge];
     NSURLRequest *photoRequest = [NSURLRequest requestWithURL:photoUrl];
-    
+
     NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration ephemeralSessionConfiguration];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
     
