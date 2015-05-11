@@ -9,13 +9,14 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Photo;
+@class Photo, Photographer;
 
 @interface Region : NSManagedObject
 
 @property (nonatomic, retain) NSString * regionName;
 @property (nonatomic, retain) NSNumber * numOfPhotgraphers;
 @property (nonatomic, retain) NSSet *photos;
+@property (nonatomic, retain) NSSet *photgraphers;
 @end
 
 @interface Region (CoreDataGeneratedAccessors)
@@ -24,5 +25,10 @@
 - (void)removePhotosObject:(Photo *)value;
 - (void)addPhotos:(NSSet *)values;
 - (void)removePhotos:(NSSet *)values;
+
+- (void)addPhotgraphersObject:(Photographer *)value;
+- (void)removePhotgraphersObject:(Photographer *)value;
+- (void)addPhotgraphers:(NSSet *)values;
+- (void)removePhotgraphers:(NSSet *)values;
 
 @end

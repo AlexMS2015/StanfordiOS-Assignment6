@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Region;
+@class Photographer, Region;
 
 @interface Photo : NSManagedObject
 
@@ -18,5 +18,6 @@
 @property (nonatomic, retain) NSString * photoDescription;
 @property (nonatomic, retain) NSString * unique;
 @property (nonatomic, retain) Region *region;
+@property (nonatomic, retain) Photographer *photographer;
 
 @end

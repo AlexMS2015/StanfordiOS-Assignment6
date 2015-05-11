@@ -11,10 +11,9 @@
 
 @implementation Region (LoadIntoFlickr)
 
-+(Region *)regionFromPlaceID:(NSString *)placeID intoContext:(NSManagedObjectContext *)context
++(Region *)regionFromPlaceID:(NSString *)placeID inContext:(NSManagedObjectContext *)context
 {
-    Region *newRegion = [NSEntityDescription insertNewObjectForEntityForName:@"Region"
-                                                      inManagedObjectContext:context];
+    __block Region *region;
     
     NSURL *placeUURL = [FlickrFetcher URLforInformationAboutPlace:placeID];
     NSURLRequest *placeURLRequest = [NSURLRequest requestWithURL:placeUURL];
@@ -31,11 +30,27 @@
                                                                                   options:0
                                                                                     error:NULL];
                  NSString *regionName = [FlickrFetcher extractRegionNameFromPlaceInformation:placeInformation];
-                 newRegion.regionName = regionName;
+                 
+                 NSFetchRequest *reqeust = [NSFetchRequest fetchRequestWithEntityName:@"Region"];
+                 reqeust.predicate = [NSPredicate predicateWithFormat:@"regionName = %@", regionName];
+                 
+                 NSError *fetchReqError;
+                 NSArray *results = [context executeFetchRequest:reqeust error:&fetchReqError];
+                 
+                 if (!results || [results count] > 1) {
+                     // error handling code
+                 } else if (![results count]) {
+                     region = [NSEntityDescription insertNewObjectForEntityForName:@"Region"
+                                                     inManagedObjectContext:context];
+                     region.regionName = regionName;
+                 } else {
+                     region = [results firstObject];
+                 }
              }];
+    
     [downloadplaceInfo resume];
     
-    return newRegion;
+    return region;
 }
 
 @end

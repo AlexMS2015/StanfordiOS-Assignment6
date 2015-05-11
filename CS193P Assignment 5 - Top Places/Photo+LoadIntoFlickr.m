@@ -8,28 +8,29 @@
 
 #import "Photo+LoadIntoFlickr.h"
 #import "FlickrFetcher.h"
-#import "Region.h"
 #import "Region+LoadIntoFlickr.h"
+#import "Photographer+LoadIntoFlickr.h"
 
 @implementation Photo (LoadIntoFlickr)
 
-+(void)loadPhoto:(NSDictionary *)photo intoContext:(NSManagedObjectContext *)context
++(void)photoFromFlickrPhoto:(NSDictionary *)photo inContext:(NSManagedObjectContext *)context
 {
     
     Photo *newPhoto = [NSEntityDescription insertNewObjectForEntityForName:@"Photo"
                                                     inManagedObjectContext:context];
-    newPhoto.photoDescription = [photo valueForKey:FLICKR_PHOTO_DESCRIPTION];
-    newPhoto.photoTitle = [photo valueForKey:FLICKR_PHOTO_TITLE];
+    newPhoto.photoDescription = [photo valueForKeyPath:FLICKR_PHOTO_DESCRIPTION];
+    newPhoto.photoTitle = [photo valueForKeyPath:FLICKR_PHOTO_TITLE];
     NSURL *photoUrl = [FlickrFetcher URLforPhoto:photo format:FlickrPhotoFormatLarge];
     newPhoto.photoURL = [photoUrl absoluteString];
-    newPhoto.region = [Region regionFromPlaceID:[photo valueForKey:FLICKR_PHOTO_ID]
-                                    intoContext:context];
+    newPhoto.region = [Region regionFromPlaceID:[photo valueForKeyPath:FLICKR_PHOTO_ID]
+                                    inContext:context];
+    newPhoto.photographer = [Photographer photographerWithName:[photo valueForKeyPath:FLICKR_PHOTO_OWNER] inRegion:newPhoto.region inContext:context];
 }
 
 +(void)loadPhotosFromFlickrArray:(NSArray *)photos intoContext:(NSManagedObjectContext *)context
 {
     [photos enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [Photo loadPhoto:obj intoContext:context];
+        [Photo photoFromFlickrPhoto:obj inContext:context];
     }];
 }
 

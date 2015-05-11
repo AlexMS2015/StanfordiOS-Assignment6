@@ -7,6 +7,7 @@
 //
 
 #import "Photo.h"
+#import "Photographer.h"
 #import "Region.h"
 
 
@@ -17,5 +18,6 @@
 @dynamic photoDescription;
 @dynamic unique;
 @dynamic region;
+@dynamic photographer;
 
 @end

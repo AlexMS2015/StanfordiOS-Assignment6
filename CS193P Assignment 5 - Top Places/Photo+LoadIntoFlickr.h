@@ -9,7 +9,6 @@
 #import "Photo.h"
 
 @interface Photo (LoadIntoFlickr)
-
 +(void)loadPhotosFromFlickrArray:(NSArray *)photos intoContext:(NSManagedObjectContext *)context;
-
++(void)photoFromFlickrPhoto:(NSDictionary *)photo inContext:(NSManagedObjectContext *)context;
 @end
