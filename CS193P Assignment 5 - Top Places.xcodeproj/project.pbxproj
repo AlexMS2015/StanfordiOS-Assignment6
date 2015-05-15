@@ -103,6 +103,7 @@
 		FAFC9A1E1B00D80E0032D8E6 /* Photographer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Photographer.m; sourceTree = "<group>"; };
 		FAFC9A221B00DBE50032D8E6 /* TopRegionsCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopRegionsCDTVC.h; sourceTree = "<group>"; };
 		FAFC9A231B00DBE50032D8E6 /* TopRegionsCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopRegionsCDTVC.m; sourceTree = "<group>"; };
+		FAFC9A3F1B0367640032D8E6 /* DatabaseAvailability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DatabaseAvailability.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +165,7 @@
 			children = (
 				FAB7B9621AF45C7700AF4514 /* AppDelegate.h */,
 				FAB7B9631AF45C7700AF4514 /* AppDelegate.m */,
+				FAFC9A3F1B0367640032D8E6 /* DatabaseAvailability.h */,
 				FAFC9A211B00DBC40032D8E6 /* Controller */,
 				FAB7B98D1AF4607200AF4514 /* FlickrDataTVC.h */,
 				FAB7B98E1AF4607200AF4514 /* FlickrDataTVC.m */,

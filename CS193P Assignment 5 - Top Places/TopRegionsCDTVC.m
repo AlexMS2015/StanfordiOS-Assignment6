@@ -7,6 +7,8 @@
 //
 
 #import "TopRegionsCDTVC.h"
+#import "Region.h"
+#import "DatabaseAvailability.h"
 
 @interface TopRegionsCDTVC ()
 
@@ -16,9 +18,29 @@
 
 #pragma mark - Properties
 
--(void)setContext:(NSManagedObjectContext *)context
+-(void)awakeFromNib
 {
-    // set the fetched results controllers in here
+    [[NSNotificationCenter defaultCenter] addObserverForName:DATABASE_AVAILABILITY_NOTIFICATION
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                            self.context = note.userInfo[DATABASE_AVAILABILITY_CONTEXT];
+    }];
+}
+
+-(void)setContext:(NSManagedObjectContext *)context
+{    
+    _context = context;
+        
+    NSFetchRequest *topRegions = [NSFetchRequest fetchRequestWithEntityName:@"Region"];
+    
+    NSSortDescriptor *numPhotosSortDesc = [NSSortDescriptor sortDescriptorWithKey:@"numOfPhotgraphers" ascending:NO];
+    NSSortDescriptor *regionNameSortDesc = [NSSortDescriptor sortDescriptorWithKey:@"regionName" ascending:YES selector:@selector(localizedCompare:)];
+
+    topRegions.sortDescriptors = @[numPhotosSortDesc, regionNameSortDesc];
+    topRegions.predicate = nil;
+    
+    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:topRegions managedObjectContext:context sectionNameKeyPath:nil cacheName:nil];
 }
 
 #pragma mark - UITableViewDataSource
@@ -26,7 +48,15 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    return nil;
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"Region Cell"];
+    
+    Region *region = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    
+    cell.textLabel.text = region.regionName;
+    cell.detailTextLabel.text = [region.numOfPhotgraphers stringValue];
+    
+    return cell;
 }
 
 @end

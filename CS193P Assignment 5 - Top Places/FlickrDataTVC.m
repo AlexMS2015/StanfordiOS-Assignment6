@@ -31,7 +31,7 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    [self downloadDataAndRefreshUI];
+    //[self downloadDataAndRefreshUI];
 }
 
 -(IBAction)downloadDataAndRefreshUI // IBAction links to the refresh control so whenever the user refreshes the table by dragging down, this method will be called.

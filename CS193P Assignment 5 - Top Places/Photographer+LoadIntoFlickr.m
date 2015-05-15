@@ -7,6 +7,7 @@
 //
 
 #import "Photographer+LoadIntoFlickr.h"
+#import "Region.h"
 
 @implementation Photographer (LoadIntoFlickr)
 
@@ -24,13 +25,15 @@
     if (!results || [results count] > 1) {
         // error code here
     } else if (![results count]) {
-        photographer = [ NSEntityDescription insertNewObjectForEntityForName:@"Photographer"
+        photographer = [NSEntityDescription insertNewObjectForEntityForName:@"Photographer"
                                                       inManagedObjectContext:context];
         photographer.region = region;
+        int numPhotographers = [photographer.region.numOfPhotgraphers integerValue];
+        photographer.region.numOfPhotgraphers = [NSNumber numberWithInt:numPhotographers];
     } else {
         photographer = [results firstObject];
     }
-    
+        
     return photographer;
 }
 @end
