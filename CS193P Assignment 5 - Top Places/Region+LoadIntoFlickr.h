@@ -9,5 +9,7 @@
 #import "Region.h"
 
 @interface Region (LoadIntoFlickr)
-+(Region *)regionFromPlaceID:(NSString *)placeID inContext:(NSManagedObjectContext *)context;
++(Region *)regionFromPlaceID:(NSString *)placeID
+             addPhotographer:(Photographer *)photographer
+                   inContext:(NSManagedObjectContext *)context;
 @end

@@ -11,6 +11,5 @@
 
 @interface Photographer (LoadIntoFlickr)
 +(Photographer *)photographerWithName:(NSString *)name
-                             inRegion:(Region *)region
                             inContext:(NSManagedObjectContext *)context;
 @end

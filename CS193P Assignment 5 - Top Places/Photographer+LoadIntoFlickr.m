@@ -8,30 +8,31 @@
 
 #import "Photographer+LoadIntoFlickr.h"
 #import "Region.h"
+#import "Region+LoadIntoFlickr.h"
 
 @implementation Photographer (LoadIntoFlickr)
 
 +(Photographer *)photographerWithName:(NSString *)name
-                             inRegion:(Region *)region
-                            inContext:(NSManagedObjectContext *)context;{
-    Photographer *photographer;
-    
+                            inContext:(NSManagedObjectContext *)context
+{
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Photographer"];
     request.predicate = [NSPredicate predicateWithFormat:@"photographerName = %@", name];
     
     NSError *error;
     NSArray *results = [context executeFetchRequest:request error:&error];
     
+    Photographer *photographer;
+
     if (!results || [results count] > 1) {
         // error code here
     } else if (![results count]) {
         photographer = [NSEntityDescription insertNewObjectForEntityForName:@"Photographer"
                                                       inManagedObjectContext:context];
-        photographer.region = region;
-        int numPhotographers = [photographer.region.numOfPhotgraphers integerValue];
-        photographer.region.numOfPhotgraphers = [NSNumber numberWithInt:numPhotographers];
+        photographer.photographerName = name;
+        NSLog(@"adding photgrapher %@", name);
     } else {
         photographer = [results firstObject];
+        NSLog(@"found existing photgrapher %@", name);
     }
         
     return photographer;

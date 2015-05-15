@@ -52,9 +52,8 @@
     
     Region *region = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    
     cell.textLabel.text = region.regionName;
-    cell.detailTextLabel.text = [region.numOfPhotgraphers stringValue];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"Active photgraphers: %@", [region.numOfPhotgraphers stringValue]];
     
     return cell;
 }

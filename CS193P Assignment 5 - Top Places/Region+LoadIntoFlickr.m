@@ -8,10 +8,13 @@
 
 #import "Region+LoadIntoFlickr.h"
 #import "FlickrFetcher.h"
+#import "Photographer.h"
 
 @implementation Region (LoadIntoFlickr)
 
-+(Region *)regionFromPlaceID:(NSString *)placeID inContext:(NSManagedObjectContext *)context
++(Region *)regionFromPlaceID:(NSString *)placeID
+             addPhotographer:(Photographer *)photographer
+                   inContext:(NSManagedObjectContext *)context
 {
     NSURL *placeURL = [FlickrFetcher URLforInformationAboutPlace:placeID];
     NSURLRequest *placeURLRequest = [NSURLRequest requestWithURL:placeURL];
@@ -40,15 +43,20 @@
              if (!results || [results count] > 1) {
                  // error handling code
              } else if (![results count]) {
-                 NSLog(@"found a new region");
                  region = [NSEntityDescription insertNewObjectForEntityForName:@"Region"
                                                  inManagedObjectContext:context];
                  region.regionName = regionName;
+                 NSLog(@"adding new region");
              } else {
-                 NSLog(@"found an existing region");
                  region = [results firstObject];
+                 NSLog(@"found existing region");
              }
-     }];
+                 
+                 [region addPhotgraphersObject:photographer];
+                 int numPhotographers = [region.numOfPhotgraphers integerValue] + 1;
+                 region.numOfPhotgraphers = [NSNumber numberWithInt:numPhotographers];
+
+    }];
     
     [downloadPlaceInfo resume];
     
