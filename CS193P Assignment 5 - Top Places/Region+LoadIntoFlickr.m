@@ -26,7 +26,10 @@
 
     NSURLSessionDownloadTask *downloadPlaceInfo = [session downloadTaskWithRequest:placeURLRequest
              completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
-                 
+    
+    //Region *region;
+    //NSURL *location = [FlickrFetcher URLforInformationAboutPlace:placeID];
+
          // load local file contents into NSData
          NSData *JSONData = [NSData dataWithContentsOfURL:location];
          NSDictionary *placeInformation = [NSJSONSerialization JSONObjectWithData:JSONData
@@ -34,11 +37,11 @@
                                                                             error:NULL];
              NSString *regionName = [FlickrFetcher extractRegionNameFromPlaceInformation:placeInformation];
             
-             NSFetchRequest *reqeust = [NSFetchRequest fetchRequestWithEntityName:@"Region"];
-             reqeust.predicate = [NSPredicate predicateWithFormat:@"regionName = %@", regionName];
+             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Region"];
+             request.predicate = [NSPredicate predicateWithFormat:@"regionName = %@", regionName];
              
              NSError *fetchReqError;
-             NSArray *results = [context executeFetchRequest:reqeust error:&fetchReqError];
+             NSArray *results = [context executeFetchRequest:request error:&fetchReqError];
              
              if (!results || [results count] > 1) {
                  // error handling code
@@ -46,18 +49,25 @@
                  region = [NSEntityDescription insertNewObjectForEntityForName:@"Region"
                                                  inManagedObjectContext:context];
                  region.regionName = regionName;
-                 NSLog(@"adding new region");
+                 NSLog(@"adding new region: %@", region.regionName);
              } else {
                  region = [results firstObject];
                  NSLog(@"found existing region");
              }
-                 
-                 [region addPhotgraphersObject:photographer];
-                 int numPhotographers = [region.numOfPhotgraphers integerValue] + 1;
-                 region.numOfPhotgraphers = [NSNumber numberWithInt:numPhotographers];
-
-    }];
     
+            NSFetchRequest *photographersInRegion = [NSFetchRequest fetchRequestWithEntityName:@"Region"];
+            photographersInRegion.predicate = [NSPredicate predicateWithFormat:@"any photographers.photographerName = %@", photographer.photographerName];
+            results = [context executeFetchRequest:photographersInRegion error:&fetchReqError];
+    
+            if ([results count]) {
+                NSLog(@"photographer %@ already exists in %@", photographer.photographerName, region.regionName);
+            } else {
+                [region addPhotographersObject:photographer];
+                NSLog(@"adding photographer: %@ to %@", photographer.photographerName, region.regionName);
+                int numPhotographers = [region.numOfPhotgraphers integerValue] + 1;
+                region.numOfPhotgraphers = [NSNumber numberWithInt:numPhotographers];
+            }
+    }];
     [downloadPlaceInfo resume];
     
     return region;

@@ -9,6 +9,18 @@
 
 @implementation CoreDataTableViewController
 
+-(NSFetchRequest *)fetchRequestForFetchedResultsController
+{
+    return nil;
+}
+
+-(void)setContext:(NSManagedObjectContext *)context
+{
+    _context = context;
+    
+    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:[self fetchRequestForFetchedResultsController] managedObjectContext:context sectionNameKeyPath:nil cacheName:nil];
+}
+
 #pragma mark - Fetching
 
 - (void)performFetch

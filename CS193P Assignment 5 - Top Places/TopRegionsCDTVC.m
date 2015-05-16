@@ -9,14 +9,9 @@
 #import "TopRegionsCDTVC.h"
 #import "Region.h"
 #import "DatabaseAvailability.h"
-
-@interface TopRegionsCDTVC ()
-
-@end
+#import "PhotosInRegionCDTVC.h"
 
 @implementation TopRegionsCDTVC
-
-#pragma mark - Properties
 
 -(void)awakeFromNib
 {
@@ -28,26 +23,37 @@
     }];
 }
 
--(void)setContext:(NSManagedObjectContext *)context
-{    
-    _context = context;
-        
+-(NSFetchRequest *)fetchRequestForFetchedResultsController
+{
     NSFetchRequest *topRegions = [NSFetchRequest fetchRequestWithEntityName:@"Region"];
     
     NSSortDescriptor *numPhotosSortDesc = [NSSortDescriptor sortDescriptorWithKey:@"numOfPhotgraphers" ascending:NO];
     NSSortDescriptor *regionNameSortDesc = [NSSortDescriptor sortDescriptorWithKey:@"regionName" ascending:YES selector:@selector(localizedCompare:)];
-
+    
     topRegions.sortDescriptors = @[numPhotosSortDesc, regionNameSortDesc];
     topRegions.predicate = nil;
     
-    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:topRegions managedObjectContext:context sectionNameKeyPath:nil cacheName:nil];
+    return topRegions;
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"Photos For Region"]) {
+        NSIndexPath *pathOfSelectedCell = [self.tableView indexPathForCell:sender];
+        Region *selectedRegion = [self.fetchedResultsController objectAtIndexPath:pathOfSelectedCell];
+        if ([segue.destinationViewController isMemberOfClass:[PhotosInRegionCDTVC class]]) {
+            PhotosInRegionCDTVC *photosInRegion = (PhotosInRegionCDTVC *)segue.destinationViewController;
+            photosInRegion.regionForPhotos = selectedRegion;
+            photosInRegion.title = [NSString stringWithFormat:@"Photos in %@", selectedRegion.regionName];
+            photosInRegion.context = self.context;
+        }
+    }
 }
 
 #pragma mark - UITableViewDataSource
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"Region Cell"];
     
     Region *region = [self.fetchedResultsController objectAtIndexPath:indexPath];

@@ -31,14 +31,20 @@
     newPhoto.region = [Region regionFromPlaceID:[photo valueForKeyPath:FLICKR_PLACE_ID]
                                 addPhotographer:photographer
                                      inContext:context];
+    NSLog(@"returned");
+    
+    //NSLog(@"SPECIAL: photo = %@, photgrapher = %@, photographer's region = %@", newPhoto.photoTitle, newPhoto.photographer, newPhoto.photographer.region);
 }
 
 +(void)loadPhotosFromFlickrArray:(NSArray *)photos intoContext:(NSManagedObjectContext *)context
 {
     NSLog(@"there are %d photos to load", [photos count]);
     [photos enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [Photo photoFromFlickrPhoto:obj inContext:context];
-        NSLog(@"loading photo %d", idx);
+        if (idx < 100) {
+            NSLog(@"-------------");
+            NSLog(@"loading photo %d", idx);
+            [Photo photoFromFlickrPhoto:obj inContext:context];
+        }
     }];
 }
 

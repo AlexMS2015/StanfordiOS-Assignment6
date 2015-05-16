@@ -10,6 +10,4 @@
 
 @interface TopRegionsCDTVC : CoreDataTableViewController
 
-@property (nonatomic, strong) NSManagedObjectContext *context;
-
 @end
