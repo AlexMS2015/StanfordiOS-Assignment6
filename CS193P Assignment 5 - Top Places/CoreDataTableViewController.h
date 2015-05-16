@@ -34,6 +34,7 @@
 // This will also automatically be called if you change the fetchedResultsController @property.
 - (void)performFetch;
 -(NSFetchRequest *)fetchRequestForFetchedResultsController; // abstract method
+-(NSString *)sectionTitleKeyPathForFetchedResultsController; // abstract method (if you don't want the default (no section headings)
 
 // Set to YES to get some debugging output in the console.
 @property BOOL debug;

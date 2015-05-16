@@ -14,11 +14,16 @@
     return nil;
 }
 
+-(NSString *)sectionTitleKeyPathForFetchedResultsController
+{
+    return nil;
+}
+
 -(void)setContext:(NSManagedObjectContext *)context
 {
     _context = context;
     
-    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:[self fetchRequestForFetchedResultsController] managedObjectContext:context sectionNameKeyPath:nil cacheName:nil];
+    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:[self fetchRequestForFetchedResultsController] managedObjectContext:context sectionNameKeyPath:[self sectionTitleKeyPathForFetchedResultsController] cacheName:nil];
 }
 
 #pragma mark - Fetching

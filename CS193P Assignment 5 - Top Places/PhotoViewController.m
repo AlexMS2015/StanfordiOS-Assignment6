@@ -21,8 +21,7 @@
 
 -(void)downloadAndDisplayPhoto
 {
-    NSURL *photoUrl = [FlickrFetcher URLforPhoto:self.photo format:FlickrPhotoFormatLarge];
-    NSURLRequest *photoRequest = [NSURLRequest requestWithURL:photoUrl];
+    NSURLRequest *photoRequest = [NSURLRequest requestWithURL:self.photoURL];
 
     NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration ephemeralSessionConfiguration];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
@@ -43,11 +42,11 @@
 
 #pragma mark - Properties
 
--(void)setPhoto:(NSDictionary *)photo
+-(void)setPhotoURL:(NSURL *)photoURL
 {
-    _photo = photo;
+    _photoURL = photoURL;
     [self downloadAndDisplayPhoto];
-    [[RecentlyViewedPhotos recentPhotos] addPhoto:photo];
+    //[[RecentlyViewedPhotos recentPhotos] addPhoto:photo];
 }
 
 - (UIImageView *)imageView

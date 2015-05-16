@@ -14,6 +14,33 @@
 
 @implementation Photo (LoadIntoFlickr)
 
+-(void)addRegionFromPlaceID:(NSString *)placeID
+                  inContext:(NSManagedObjectContext *)context
+{
+    NSURL *placeURL = [FlickrFetcher URLforInformationAboutPlace:placeID];
+    NSURLRequest *placeURLRequest = [NSURLRequest requestWithURL:placeURL];
+    
+    NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
+    
+    NSURLSessionDownloadTask *downloadPlaceInfo = [session downloadTaskWithRequest:placeURLRequest
+                                                                 completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+
+            // load local file contents into NSData
+            NSData *JSONData = [NSData dataWithContentsOfURL:location];
+            NSDictionary *placeInformation = [NSJSONSerialization JSONObjectWithData:JSONData
+                                                                          options:0
+                                                                            error:NULL];
+            NSString *regionName = [FlickrFetcher extractRegionNameFromPlaceInformation:placeInformation];
+
+            self.region = [Region regionWithName:regionName
+                              addPhotographer:self.photographer
+                                    inContext:context];
+            }];
+    
+    [downloadPlaceInfo resume];
+}
+
 +(void)photoFromFlickrPhoto:(NSDictionary *)photo inContext:(NSManagedObjectContext *)context
 {
     
@@ -26,14 +53,9 @@
     newPhoto.photoURL = [photoUrl absoluteString];
     
     Photographer *photographer = [Photographer photographerWithName:[photo valueForKeyPath:FLICKR_PHOTO_OWNER] inContext:context];
-    
     newPhoto.photographer = photographer;
-    newPhoto.region = [Region regionFromPlaceID:[photo valueForKeyPath:FLICKR_PLACE_ID]
-                                addPhotographer:photographer
-                                     inContext:context];
-    NSLog(@"returned");
     
-    //NSLog(@"SPECIAL: photo = %@, photgrapher = %@, photographer's region = %@", newPhoto.photoTitle, newPhoto.photographer, newPhoto.photographer.region);
+    [newPhoto addRegionFromPlaceID:[photo valueForKeyPath:FLICKR_PHOTO_PLACE_ID] inContext:context];
 }
 
 +(void)loadPhotosFromFlickrArray:(NSArray *)photos intoContext:(NSManagedObjectContext *)context

@@ -9,12 +9,18 @@
 #import "PhotosInRegionCDTVC.h"
 #import "Region.h"
 #import "Photo.h"
+#import "PhotoViewController.h"
 
 @interface PhotosInRegionCDTVC ()
 
 @end
 
 @implementation PhotosInRegionCDTVC
+
+-(NSString *)sectionTitleKeyPathForFetchedResultsController
+{
+    return @"Photographer.photographerName";
+}
 
 -(NSFetchRequest *)fetchRequestForFetchedResultsController
 {
@@ -24,20 +30,20 @@
     
     photosInRegion.sortDescriptors = @[photoNameSortDesc];
     photosInRegion.predicate = [NSPredicate predicateWithFormat:@"region.regionName = %@", self.regionForPhotos.regionName];
-    
-    NSError *error;
-    NSArray *photoResults = [self.context executeFetchRequest:photosInRegion error:&error];
-    
-    NSLog(@"found photos: %@ in %@", photoResults, self.regionForPhotos.regionName);
-    
+
     return photosInRegion;
 }
 
--(void)setContext:(NSManagedObjectContext *)context
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    [super setContext:context];
-    
-    //self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:[self fetchRequestForFetchedResultsController] managedObjectContext:context sectionNameKeyPath:@"Photographer.photographerName" cacheName:nil];
+    if ([segue.identifier isEqual: @"Show Photo"]) {
+        NSIndexPath *pathOfSelectedCell = [self.tableView indexPathForCell:sender];
+        Photo *selectedPhoto = [self.fetchedResultsController objectAtIndexPath:pathOfSelectedCell];
+        if ([segue.destinationViewController isMemberOfClass:[PhotoViewController class]]) {
+            PhotoViewController *selectedPhotoVC = (PhotoViewController *)segue.destinationViewController;
+            selectedPhotoVC.photoURL = [NSURL URLWithString:selectedPhoto.photoURL];
+        }
+    }
 }
 
 #pragma mark - UITableViewDataSource

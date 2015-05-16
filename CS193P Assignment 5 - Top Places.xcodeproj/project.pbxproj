@@ -180,8 +180,6 @@
 				FAB1A6E51AF6180F00381201 /* PhotosForPlaceTVC.m */,
 				FAFA45591AFD9DCC007806E9 /* RecentlyViewedTVC.h */,
 				FAFA455A1AFD9DCC007806E9 /* RecentlyViewedTVC.m */,
-				FAB1A6E71AF8E50B00381201 /* PhotoViewController.h */,
-				FAB1A6E81AF8E50B00381201 /* PhotoViewController.m */,
 				FAFC99E31AFF657D0032D8E6 /* View */,
 				FAFA45581AFD90C5007806E9 /* Model */,
 				FAB7B96B1AF45C7700AF4514 /* Images.xcassets */,
@@ -270,6 +268,8 @@
 				FAFC9A231B00DBE50032D8E6 /* TopRegionsCDTVC.m */,
 				FA6210481B06234D000F20C8 /* PhotosInRegionCDTVC.h */,
 				FA6210491B06234D000F20C8 /* PhotosInRegionCDTVC.m */,
+				FAB1A6E71AF8E50B00381201 /* PhotoViewController.h */,
+				FAB1A6E81AF8E50B00381201 /* PhotoViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
