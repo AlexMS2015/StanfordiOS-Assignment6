@@ -9,6 +9,7 @@
 #import "PhotoViewController.h"
 #import "FlickrFetcher.h"
 #import "RecentlyViewedPhotos.h"
+#import "Photo.h"
 
 @interface PhotoViewController () <UIScrollViewDelegate, UISplitViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -21,7 +22,8 @@
 
 -(void)downloadAndDisplayPhoto
 {
-    NSURLRequest *photoRequest = [NSURLRequest requestWithURL:self.photoURL];
+    NSURL *photoURL = [NSURL URLWithString:self.photo.photoURL];
+    NSURLRequest *photoRequest = [NSURLRequest requestWithURL:photoURL];
 
     NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration ephemeralSessionConfiguration];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
@@ -40,13 +42,30 @@
     [downloadPhotoTask resume];
 }
 
+-(void)downloadThumbnail
+{
+    NSURL *photoURL = [NSURL URLWithString:self.photo.thumbnailURL];
+    NSURLRequest *photoRequest = [NSURLRequest requestWithURL:photoURL];
+    
+    NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
+    
+    NSURLSessionDownloadTask *downloadPhotoTask = [session downloadTaskWithRequest:photoRequest
+                                                                 completionHandler:
+               ^(NSURL *location, NSURLResponse *response, NSError *error) {
+                   self.photo.thumbnail = [NSData dataWithContentsOfURL:location];
+               }];
+    [downloadPhotoTask resume];
+}
+
 #pragma mark - Properties
 
--(void)setPhotoURL:(NSURL *)photoURL
+-(void)setPhoto:(Photo *)photo
 {
-    _photoURL = photoURL;
+    _photo = photo;
+    _photo.recentlyViewed = [NSNumber numberWithBool:YES];
+    [self downloadThumbnail];
     [self downloadAndDisplayPhoto];
-    //[[RecentlyViewedPhotos recentPhotos] addPhoto:photo];
 }
 
 - (UIImageView *)imageView

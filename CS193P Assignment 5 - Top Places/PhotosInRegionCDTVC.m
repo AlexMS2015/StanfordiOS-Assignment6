@@ -34,31 +34,4 @@
     return photosInRegion;
 }
 
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([segue.identifier isEqual: @"Show Photo"]) {
-        NSIndexPath *pathOfSelectedCell = [self.tableView indexPathForCell:sender];
-        Photo *selectedPhoto = [self.fetchedResultsController objectAtIndexPath:pathOfSelectedCell];
-        if ([segue.destinationViewController isMemberOfClass:[PhotoViewController class]]) {
-            PhotoViewController *selectedPhotoVC = (PhotoViewController *)segue.destinationViewController;
-            selectedPhotoVC.photoURL = [NSURL URLWithString:selectedPhoto.photoURL];
-        }
-    }
-}
-
-#pragma mark - UITableViewDataSource
-
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"Photo Cell"];
-    
-    Photo *photo = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    
-    cell.textLabel.text = photo.photoTitle;
-    cell.detailTextLabel.text = photo.photoDescription;
-    
-    return cell;
-}
-
 @end

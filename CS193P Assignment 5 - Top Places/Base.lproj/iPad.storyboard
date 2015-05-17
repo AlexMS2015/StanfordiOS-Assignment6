@@ -23,10 +23,10 @@
             </objects>
             <point key="canvasLocation" x="-1315" y="-40"/>
         </scene>
-        <!--Recently ViewedTVC - Recently Viewed Photos-->
+        <!--Recently ViewedCDTVC - Recently Viewed Photos-->
         <scene sceneID="uNw-QA-kiR">
             <objects>
-                <tableViewController id="566-Wm-fpj" customClass="RecentlyViewedTVC" sceneMemberID="viewController">
+                <tableViewController id="566-Wm-fpj" customClass="RecentlyViewedCDTVC" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="qco-2b-Uqn">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -71,16 +71,16 @@
             </objects>
             <point key="canvasLocation" x="750" y="1695"/>
         </scene>
-        <!--Top PlacesTVC - Top Places-->
+        <!--Top RegionsCDTVC - Top Places-->
         <scene sceneID="vSk-CM-6Yy">
             <objects>
-                <tableViewController id="Dnp-ey-YE3" customClass="TopPlacesTVC" sceneMemberID="viewController">
+                <tableViewController id="Dnp-ey-YE3" customClass="TopRegionsCDTVC" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Qhy-LL-tqJ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Place Cell" textLabel="9dP-vr-geZ" detailTextLabel="oeL-Im-lCO" style="IBUITableViewCellStyleSubtitle" id="niV-1i-UdQ">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Region Cell" textLabel="9dP-vr-geZ" detailTextLabel="oeL-Im-lCO" style="IBUITableViewCellStyleSubtitle" id="niV-1i-UdQ">
                                 <rect key="frame" x="0.0" y="119" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="niV-1i-UdQ" id="zE8-NY-9aA">
@@ -104,7 +104,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="NMv-Lm-g3Y" kind="push" identifier="Show Photos for Place" id="m2w-cS-7mi"/>
+                                    <segue destination="NMv-Lm-g3Y" kind="push" identifier="Photos For Region" id="m2w-cS-7mi"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -116,9 +116,6 @@
                     <navigationItem key="navigationItem" title="Top Places" id="QJp-wG-DnZ"/>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="TvM-6f-kjt">
                         <autoresizingMask key="autoresizingMask"/>
-                        <connections>
-                            <action selector="downloadDataAndRefreshUI" destination="Dnp-ey-YE3" eventType="valueChanged" id="mjG-va-Kpe"/>
-                        </connections>
                     </refreshControl>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yre-kD-HJm" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -137,8 +134,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView appearanceType="aqua" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q0K-UX-3HU">
-                                <rect key="frame" x="0.0" y="20" width="768" height="954"/>
+                            <scrollView appearanceType="aqua" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q0K-UX-3HU">
+                                <rect key="frame" x="0.0" y="64" width="768" height="910"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </scrollView>
                         </subviews>
@@ -159,10 +156,10 @@
             </objects>
             <point key="canvasLocation" x="1724" y="459"/>
         </scene>
-        <!--Photos For PlaceTVC - Photos in Place-->
+        <!--Photos In RegionCDTVC - Photos in Place-->
         <scene sceneID="j4E-Sd-Cda">
             <objects>
-                <tableViewController id="NMv-Lm-g3Y" customClass="PhotosForPlaceTVC" sceneMemberID="viewController">
+                <tableViewController id="NMv-Lm-g3Y" customClass="PhotosInRegionCDTVC" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="3Uo-NZ-bwz">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -201,9 +198,6 @@
                     <navigationItem key="navigationItem" title="Photos in Place" id="oGa-Uf-nmk"/>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="Arc-IR-rmo">
                         <autoresizingMask key="autoresizingMask"/>
-                        <connections>
-                            <action selector="downloadDataAndRefreshUI" destination="NMv-Lm-g3Y" eventType="valueChanged" id="f20-bG-oil"/>
-                        </connections>
                     </refreshControl>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j89-9F-0ZT" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -289,6 +283,6 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="4uC-HL-6Y3"/>
+        <segue reference="4hr-51-SW2"/>
     </inferredMetricsTieBreakers>
 </document>

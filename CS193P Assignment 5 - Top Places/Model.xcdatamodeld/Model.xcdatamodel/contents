@@ -4,6 +4,9 @@
         <attribute name="photoDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="photoTitle" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="photoURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="recentlyViewed" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="thumbnail" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="thumbnailURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="unique" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="photographer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Photographer" inverseName="photos" inverseEntity="Photographer" syncable="YES"/>
         <relationship name="region" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Region" inverseName="photos" inverseEntity="Region" syncable="YES"/>
@@ -20,7 +23,7 @@
         <relationship name="photos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Photo" inverseName="region" inverseEntity="Photo" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Photo" positionX="268" positionY="-0" width="128" height="133"/>
+        <element name="Photo" positionX="268" positionY="-0" width="128" height="178"/>
         <element name="Photographer" positionX="25" positionY="152" width="128" height="88"/>
         <element name="Region" positionX="259" positionY="261" width="128" height="103"/>
     </elements>

@@ -19,7 +19,7 @@
                                                       object:nil
                                                        queue:nil
                                                   usingBlock:^(NSNotification *note) {
-                            self.context = note.userInfo[DATABASE_AVAILABILITY_CONTEXT];
+                    self.context = note.userInfo[DATABASE_AVAILABILITY_CONTEXT];
     }];
 }
 
@@ -43,11 +43,17 @@
         Region *selectedRegion = [self.fetchedResultsController objectAtIndexPath:pathOfSelectedCell];
         if ([segue.destinationViewController isMemberOfClass:[PhotosInRegionCDTVC class]]) {
             PhotosInRegionCDTVC *photosInRegion = (PhotosInRegionCDTVC *)segue.destinationViewController;
-            photosInRegion.regionForPhotos = selectedRegion;
-            photosInRegion.title = [NSString stringWithFormat:@"Photos in %@", selectedRegion.regionName];
-            photosInRegion.context = self.context;
+            [self preparePhotosInRegionVC:photosInRegion WithRegion:selectedRegion];
         }
     }
+}
+
+-(void)preparePhotosInRegionVC:(PhotosInRegionCDTVC *)photosInRegion
+                    WithRegion:(Region *)selectedRegion
+{
+    photosInRegion.regionForPhotos = selectedRegion;
+    photosInRegion.title = [NSString stringWithFormat:@"Photos in %@", selectedRegion.regionName];
+    photosInRegion.context = self.context;
 }
 
 #pragma mark - UITableViewDataSource

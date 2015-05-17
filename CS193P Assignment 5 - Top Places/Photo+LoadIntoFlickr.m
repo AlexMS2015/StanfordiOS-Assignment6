@@ -50,8 +50,9 @@
     newPhoto.photoDescription = [photo valueForKeyPath:FLICKR_PHOTO_DESCRIPTION];
     newPhoto.photoTitle = [photo valueForKeyPath:FLICKR_PHOTO_TITLE];
     NSURL *photoUrl = [FlickrFetcher URLforPhoto:photo format:FlickrPhotoFormatLarge];
+    NSURL *thumbnailUrl = [FlickrFetcher URLforPhoto:photo format:FlickrPhotoFormatSquare];
     newPhoto.photoURL = [photoUrl absoluteString];
-    
+    newPhoto.thumbnailURL = [thumbnailUrl absoluteString];
     Photographer *photographer = [Photographer photographerWithName:[photo valueForKeyPath:FLICKR_PHOTO_OWNER] inContext:context];
     newPhoto.photographer = photographer;
     

@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+@class Photo;
 
 @interface PhotoViewController : UIViewController
-@property (nonatomic, strong) NSURL *photoURL;
+@property (nonatomic, strong) Photo *photo;
 @end

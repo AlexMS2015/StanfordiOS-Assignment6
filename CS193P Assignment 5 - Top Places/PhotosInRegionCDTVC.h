@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Alex Smith. All rights reserved.
 //
 
-#import "CoreDataTableViewController.h"
+#import "ListOfPhotosCDTVC.h"
 @class Region;
 
-@interface PhotosInRegionCDTVC : CoreDataTableViewController
+@interface PhotosInRegionCDTVC : ListOfPhotosCDTVC
 @property (strong, nonatomic) Region *regionForPhotos;
 @end
