@@ -59,7 +59,7 @@
 #pragma mark - UITableViewDataSource
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+{    
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"Region Cell"];
     
     Region *region = [self.fetchedResultsController objectAtIndexPath:indexPath];

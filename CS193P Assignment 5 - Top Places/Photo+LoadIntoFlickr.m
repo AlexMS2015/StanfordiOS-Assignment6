@@ -11,6 +11,7 @@
 #import "Region+LoadIntoFlickr.h"
 #import "Photographer.h"
 #import "Photographer+LoadIntoFlickr.h"
+#import "FlickrDownloadSession.h"
 
 @implementation Photo (LoadIntoFlickr)
 
@@ -20,10 +21,7 @@
     NSURL *placeURL = [FlickrFetcher URLforInformationAboutPlace:placeID];
     NSURLRequest *placeURLRequest = [NSURLRequest requestWithURL:placeURL];
     
-    NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration ephemeralSessionConfiguration];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
-    
-    NSURLSessionDownloadTask *downloadPlaceInfo = [session downloadTaskWithRequest:placeURLRequest
+    NSURLSessionDownloadTask *downloadPlaceInfo = [[FlickrDownloadSession sharedFlickrDownloadSession] downloadTaskWithRequest:placeURLRequest
                                                                  completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
 
             // load local file contents into NSData

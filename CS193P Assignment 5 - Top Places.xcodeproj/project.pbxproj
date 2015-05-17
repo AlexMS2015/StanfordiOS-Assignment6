@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		FA62104A1B06234D000F20C8 /* PhotosInRegionCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6210491B06234D000F20C8 /* PhotosInRegionCDTVC.m */; };
+		FA7B04F21B087F460001B3A9 /* FlickrDownloadSession.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7B04F11B087F460001B3A9 /* FlickrDownloadSession.m */; };
 		FAB1A6E91AF8E50B00381201 /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB1A6E81AF8E50B00381201 /* PhotoViewController.m */; };
 		FAB1A6EF1AFA3FEA00381201 /* iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAB1A6ED1AFA3FEA00381201 /* iPad.storyboard */; };
 		FAB7B9541AF45C7700AF4514 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAB7B9531AF45C7700AF4514 /* Foundation.framework */; };
@@ -51,6 +52,8 @@
 /* Begin PBXFileReference section */
 		FA6210481B06234D000F20C8 /* PhotosInRegionCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotosInRegionCDTVC.h; sourceTree = "<group>"; };
 		FA6210491B06234D000F20C8 /* PhotosInRegionCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotosInRegionCDTVC.m; sourceTree = "<group>"; };
+		FA7B04F01B087F460001B3A9 /* FlickrDownloadSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlickrDownloadSession.h; sourceTree = "<group>"; };
+		FA7B04F11B087F460001B3A9 /* FlickrDownloadSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlickrDownloadSession.m; sourceTree = "<group>"; };
 		FAB1A6E71AF8E50B00381201 /* PhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoViewController.h; sourceTree = "<group>"; };
 		FAB1A6E81AF8E50B00381201 /* PhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoViewController.m; sourceTree = "<group>"; };
 		FAB1A6EE1AFA3FEA00381201 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/iPad.storyboard; sourceTree = "<group>"; };
@@ -222,6 +225,8 @@
 				FAFC99E51AFF87ED0032D8E6 /* Photo+LoadIntoFlickr.m */,
 				FAFC99F31B00C25F0032D8E6 /* Region+LoadIntoFlickr.h */,
 				FAFC99F41B00C25F0032D8E6 /* Region+LoadIntoFlickr.m */,
+				FA7B04F01B087F460001B3A9 /* FlickrDownloadSession.h */,
+				FA7B04F11B087F460001B3A9 /* FlickrDownloadSession.m */,
 				FAFC9A0B1B00D5540032D8E6 /* Photographer+LoadIntoFlickr.h */,
 				FAFC9A0C1B00D5540032D8E6 /* Photographer+LoadIntoFlickr.m */,
 				FAFA45551AFD90BC007806E9 /* RecentlyViewedPhotos.h */,
@@ -370,6 +375,7 @@
 				FAB7B98C1AF45E0F00AF4514 /* FlickrFetcher.m in Sources */,
 				FABCE88D1B086DA50003B37A /* Photographer.m in Sources */,
 				FAB7B9601AF45C7700AF4514 /* main.m in Sources */,
+				FA7B04F21B087F460001B3A9 /* FlickrDownloadSession.m in Sources */,
 				FABCE87B1B070FED0003B37A /* ListOfPhotosCDTVC.m in Sources */,
 				FAB1A6E91AF8E50B00381201 /* PhotoViewController.m in Sources */,
 				FAFC9A241B00DBE50032D8E6 /* TopRegionsCDTVC.m in Sources */,

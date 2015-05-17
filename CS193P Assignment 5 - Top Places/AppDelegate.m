@@ -50,6 +50,23 @@
     return _flickrDownloadSession;
 }
 
+#pragma mark - Flickr Fetching
+
+-(void)startFlickrFetch
+{
+    [self.flickrDownloadSession getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks) {
+        if (![downloadTasks count]) {
+            NSURLSessionDownloadTask *task = [self.flickrDownloadSession downloadTaskWithURL:[FlickrFetcher URLforRecentGeoreferencedPhotos]];
+            task.taskDescription = FLICKR_FETCH;
+            [task resume];
+        } else {
+            for (NSURLSessionDownloadTask *task in downloadTasks) {
+                [task resume];
+            }
+        }
+    }];
+}
+
 #pragma mark - Helper Methods
 
 -(NSManagedObjectContext *)managedContextFromDocument:(UIManagedDocument *)document
@@ -76,7 +93,7 @@
         [documentForDatabaseContext openWithCompletionHandler:^(BOOL success) {
             if (success) {
                 self.databaseContext = [self managedContextFromDocument:documentForDatabaseContext];
-                [self startFlickrFetch];
+                if (self.databaseContext) [self startFlickrFetch];
             }
         }];
     } else {
@@ -85,27 +102,10 @@
                             completionHandler:^(BOOL success) {
             if (success) {
                 self.databaseContext = [self managedContextFromDocument:documentForDatabaseContext];
-                [self startFlickrFetch];
+                if (self.databaseContext) [self startFlickrFetch];
             }
         }];
     }
-}
-
-#pragma mark - Flickr Fetching
-
--(void)startFlickrFetch
-{
-    [self.flickrDownloadSession getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks) {
-        if (![downloadTasks count]) {
-            NSURLSessionDownloadTask *task = [self.flickrDownloadSession downloadTaskWithURL:[FlickrFetcher URLforRecentGeoreferencedPhotos]];
-            task.taskDescription = FLICKR_FETCH;
-            [task resume];
-        } else {
-            for (NSURLSessionDownloadTask *task in downloadTasks) {
-                [task resume];
-            }
-        }
-    }];
 }
 
 #pragma mark - Application Life Cycle
